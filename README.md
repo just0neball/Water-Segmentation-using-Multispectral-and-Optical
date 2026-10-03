@@ -235,6 +235,16 @@ Core models were evaluated using three random seeds:
 
 This reduces the risk of reporting conclusions based on one favorable random initialization.
 
+### Validation IoU Across Three Seeds
+
+| Model | Val IoU (mean ± std, 3 seeds) |
+|---|---:|
+| UNetBN + E1 | 0.7567 ± 0.0012 |
+| UNetBN + E0 | 0.7557 ± 0.0042 |
+| UNetBN + benchmark12 | 0.7542 ± 0.0021 |
+| UNetBN + E4 | 0.7467 ± 0.0074 |
+| ResUNetBN + E4 | 0.7936 ± 0.0112 |
+
 The complete multi-seed results are available in:
 
 ```text
@@ -360,6 +370,14 @@ Large model checkpoints are intentionally excluded from the repository.
 ## How to Run
 
 The project was developed and trained in Kaggle.
+
+### Dataset
+
+The dataset used in this project is available on Kaggle:
+
+https://www.kaggle.com/datasets/nebalelshobary/satellite-multispectral-water-segmentation
+
+### Steps
 
 1. Attach the multispectral water-segmentation dataset to the Kaggle notebook.
 2. Enable a GPU accelerator.

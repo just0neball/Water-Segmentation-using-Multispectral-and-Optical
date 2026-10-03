@@ -454,25 +454,8 @@ Important limitations include:
 
 ## Conclusion
 
-A standard normalized 12-channel U-Net benchmark achieved:
+Under the improved training recipe, the 12-channel benchmark (val IoU 0.7542) was statistically indistinguishable from the clean 7-band baseline E0 (0.7557) and E1 (0.7567), while UNetBN+E4 was slightly lower (0.7467).
 
-```text
-Test TTA IoU = 0.6851 ± 0.0064
-```
+The held-out gain of the final model (+0.056 test IoU) therefore comes mainly from the ResUNetBN architecture combined with E4.
 
-The final **ResUNetBN + E4** configuration achieved:
-
-```text
-Test TTA IoU = 0.7413 ± 0.0036
-Test TTA F1  = 0.8514
-```
-
-This corresponds to an average held-out Test IoU improvement of:
-
-```text
-+0.0562
-```
-
-The improvement was positive for all three evaluated seeds.
-
-The results suggest that combining stronger model optimization, residual segmentation blocks, engineered spectral information, and carefully selected auxiliary priors provides a meaningful improvement over the standard 12-channel benchmark.
+The separate contribution of the E4 features on top of ResUNetBN was not isolated.

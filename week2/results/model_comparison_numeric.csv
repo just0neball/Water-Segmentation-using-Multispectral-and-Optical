@@ -1,0 +1,25 @@
+Model,Split,Metric,Mean,Std,N_seeds
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Val,IoU,0.7542430394421563,0.0020627129894795087,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Val,F1,0.8599060636304446,0.0013405386737726332,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Val,Precision,0.8971669240597228,0.0058417419639287815,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Val,Recall,0.8256615141382516,0.005644218188559206,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Test,IoU,0.6844895379506813,0.005549953101827048,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Test,F1,0.812688098672344,0.00391022064996211,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Test,Precision,,,3
+"Week 1 scratch U-Net (UNetBN, benchmark12)",Test,Recall,,,3
+"Week 2 resnet34-unet, random init (ablation)",Val,IoU,0.7605830838701743,0.016462478338598558,3
+"Week 2 resnet34-unet, random init (ablation)",Val,F1,0.8639466323821172,0.010599925873617026,3
+"Week 2 resnet34-unet, random init (ablation)",Val,Precision,0.8972040978898614,0.010655279823040851,3
+"Week 2 resnet34-unet, random init (ablation)",Val,Recall,0.833112561557892,0.01297498447856538,3
+"Week 2 resnet34-unet, random init (ablation)",Test,IoU,0.7032495249918433,0.02889306554049775,3
+"Week 2 resnet34-unet, random init (ablation)",Test,F1,0.8255471942313529,0.020049065537973015,3
+"Week 2 resnet34-unet, random init (ablation)",Test,Precision,0.8501172506539466,0.02206707678342734,3
+"Week 2 resnet34-unet, random init (ablation)",Test,Recall,0.8023637233052883,0.01832885153651983,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Val,IoU,0.7824629562263034,0.006193709685722371,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Val,F1,0.877947992425268,0.003906275266304761,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Val,Precision,0.8883870504289318,0.016368965568027794,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Val,Recall,0.8682722472073686,0.021349685200462817,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Test,IoU,0.7439952796432073,0.003131399092526312,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Test,F1,0.8532054361146705,0.0020585462227905396,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Test,Precision,0.8545498560000473,0.01259215697578424,3
+"Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra)",Test,Recall,0.852097901480899,0.012192954546395325,3

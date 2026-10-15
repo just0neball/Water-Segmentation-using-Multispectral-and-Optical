@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071623">
+  <title>WaterSeg AI | Satellite Water Segmentation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">W<span>·</span></div>
+        <div>
+          <div class="brand-name">WaterSeg <span>AI</span></div>
+          <div class="brand-sub">MULTISPECTRAL INTELLIGENCE</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="status-dot"></span>
+        <span>LOCAL INFERENCE</span>
+        <span class="version">WEEK 03 · DEPLOYMENT</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">SATELLITE IMAGERY / DEEP LEARNING</div>
+      <h1>See water.<br><em>Understand the landscape.</em></h1>
+      <p>
+        Explore satellite imagery using a trained ResNet34 U-Net model.
+        Select a test sample or upload your own 12-band image to visualize
+        water segmentation results.
+      </p>
+      <div class="hero-tags">
+        <span>12 Spectral Bands</span>
+        <span>ResNet34 U-Net</span>
+        <span>128 × 128 Resolution</span>
+        <span>Binary Segmentation</span>
+      </div>
+    </section>
+
+    <section class="workspace-heading">
+      <div>
+        <div class="eyebrow">01 / INPUT WORKSPACE</div>
+        <h2>Choose an image</h2>
+      </div>
+      <div class="workspace-note">Select a sample or upload your own</div>
+    </section>
+
+    <section class="input-layout">
+
+      <div class="panel gallery-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Test Set Gallery</h3>
+            <p>Browse the held-out satellite test collection.</p>
+          </div>
+          <span id="galleryCount" class="count-pill">Loading...</span>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input
+            type="search"
+            id="gallerySearch"
+            placeholder="Search sample number..."
+            aria-label="Search samples by number"
+          >
+          <button id="clearSearch" class="clear-search" type="button"
+                  aria-label="Clear search">×</button>
+        </div>
+
+        <div id="galleryGrid" class="gallery-grid">
+          <p class="loading-gallery">Loading satellite previews...</p>
+        </div>
+
+        <div class="gallery-footer">
+          <span id="selectedText">No sample selected</span>
+          <button id="analyzeGalleryBtn" type="button" disabled>
+            Analyze Selected Image <span>↗</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel upload-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Upload Your Image</h3>
+            <p>Run inference on an external satellite file.</p>
+          </div>
+          <span class="count-pill">CUSTOM INPUT</span>
+        </div>
+
+        <label class="upload-dropzone" id="uploadDropzone" for="imageFile">
+          <div class="upload-symbol">↑</div>
+          <div class="upload-title" id="fileName">Choose an image file</div>
+          <div class="upload-description">
+            Click here to browse your computer
+          </div>
+          <div class="format-pills">
+            <span>.TIF</span>
+            <span>.TIFF</span>
+            <span>.NPY</span>
+          </div>
+          <input
+            type="file"
+            id="imageFile"
+            accept=".tif,.tiff,.npy"
+          >
+        </label>
+
+        <div class="upload-guidance">
+          <div><span>INPUT</span><strong>12 spectral channels</strong></div>
+          <div><span>SIZE</span><strong>128 × 128 pixels</strong></div>
+          <div><span>LIMIT</span><strong>20 MB maximum</strong></div>
+        </div>
+
+        <button id="uploadBtn" class="primary-button" type="button" disabled>
+          Analyze Uploaded Image <span>↗</span>
+        </button>
+
+        <p class="upload-footnote">
+          Ordinary 3-channel RGB photos are not supported.
+          Images must use the original training band order and
+          compatible multispectral values.
+        </p>
+      </div>
+
+    </section>
+
+    <section class="workspace-heading results-heading">
+      <div>
+        <div class="eyebrow">02 / AI SEGMENTATION OUTPUT</div>
+        <h2>Analysis results</h2>
+      </div>
+      <span class="model-label">POWERED BY RESNET34 U-NET</span>
+    </section>
+
+    <section class="panel results-panel">
+
+      <div class="results-top">
+        <div class="result-info">
+          <div id="statusIndicator" class="result-state">READY</div>
+          <h3 id="resultTitle">Waiting for analysis</h3>
+          <p id="status" role="status" aria-live="polite">
+            Choose a gallery image or upload a satellite file to begin.
+          </p>
+        </div>
+
+        <div class="metric-group">
+          <div class="metric">
+            <span class="metric-label">PREDICTED WATER COVERAGE</span>
+            <strong id="coverage">—</strong>
+            <small>Percentage of image classified as water</small>
+          </div>
+          <div class="metric metric-secondary">
+            <span class="metric-label">IMAGE SOURCE</span>
+            <strong id="resultSource">—</strong>
+            <small id="resultFile">No file analyzed</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-grid">
+
+        <article class="result-card">
+          <div class="image-label">
+            <span class="label-number">01</span>
+            <div>
+              <h4>Original Satellite Image</h4>
+              <p>RGB visualization of the multispectral input</p>
+            </div>
+          </div>
+          <div class="image-frame">
+            <img id="originalImage" alt="Original satellite RGB preview" hidden>
+            <div id="originalPlaceholder" class="placeholder">
+              <span>◫</span>
+              <p>Original image preview</p>
+            </div>
+          </div>
+          <a id="downloadOriginal" class="image-download" hidden>
+            Download Original Preview ↓
+          </a>
+        </article>
+
+        <article class="result-card">
+          <div class="image-label">
+            <span class="label-number">02</span>
+            <div>
+              <h4>Predicted Water Mask</h4>
+              <p>White indicates detected water regions</p>
+            </div>
+          </div>
+          <div class="image-frame">
+            <img id="maskImage" alt="Binary predicted water mask" hidden>
+            <div id="maskPlaceholder" class="placeholder">
+              <span>◫</span>
+              <p>Binary mask preview</p>
+            </div>
+          </div>
+          <a id="downloadMask" class="image-download" hidden>
+            Download Binary Mask ↓
+          </a>
+        </article>
+
+        <article class="result-card">
+          <div class="image-label">
+            <span class="label-number">03</span>
+            <div>
+              <h4>Water Detection Overlay</h4>
+              <p>Cyan highlights predicted water regions</p>
+            </div>
+          </div>
+          <div class="image-frame">
+            <img id="overlayImage" alt="Water detection overlay" hidden>
+            <div id="overlayPlaceholder" class="placeholder">
+              <span>◫</span>
+              <p>Segmentation overlay preview</p>
+            </div>
+          </div>
+          <a id="downloadOverlay" class="image-download" hidden>
+            Download Overlay ↓
+          </a>
+        </article>
+
+      </div>
+
+      <div class="result-legend">
+        <span><i class="legend-white"></i> White = predicted water</span>
+        <span><i class="legend-black"></i> Black = background</span>
+        <span><i class="legend-cyan"></i> Cyan = overlay highlight</span>
+      </div>
+
+      <div class="result-note">
+        <strong>How to interpret the result</strong>
+        <p>
+          Water Coverage measures the fraction of pixels predicted as water.
+          It is not the model's accuracy or IoU score.
+        </p>
+      </div>
+
+    </section>
+
+    <footer class="footer">
+      <span>WaterSeg AI · Multispectral Water Segmentation</span>
+      <span>Cellula Technologies · Week 3 Deployment Project</span>
+    </footer>
+
+  </div>
+</body>
+</html>

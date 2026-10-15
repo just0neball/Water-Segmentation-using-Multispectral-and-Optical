@@ -1,51 +1,155 @@
-# Water Segmentation Using Multispectral and Optical Data
+> **GitHub setup:** Download the trained checkpoint
+> from the repository's Releases section and save it
+> as `week3/best_water_segmentation_model.pth`
+> before running the application.
+>
+> See `MODEL_SETUP.md` for details.
 
-This repository contains a two-week water segmentation project using multispectral satellite imagery.
+# WaterSeg AI
+## Week 3 — Multispectral Water Segmentation Deployment
 
-## Week 1 — Water Segmentation from Scratch
+WaterSeg AI is a local web application for identifying
+water regions in multispectral satellite images.
 
-Week 1 focuses on building and evaluating a water-segmentation pipeline from scratch.
+## Model
 
-Main work:
-- Dataset exploration and preprocessing
-- 12-channel multispectral input
-- U-Net trained from scratch
-- Multi-seed evaluation
-- Held-out test evaluation
+- Architecture: ResNet34 U-Net
+- Framework: PyTorch
+- Input: 12 x 128 x 128
+- Output: Binary water segmentation mask
+- Threshold: 0.5
+- Device: CPU
+- Initialization: rgb_zero_extra
+- Random seed: 123
+- Selected best epoch: 61
+- Week 2 best validation IoU: approximately 0.7867
 
-➡️ [Open Week 1](./week1/)
+## Application Features
 
----
+1. Gallery containing all 46 held-out Test Set images.
+2. Search images by sample number.
+3. Select and analyze a gallery image.
+4. Upload an external TIFF or NPY multispectral image.
+5. Display:
+   - Original Satellite RGB Preview
+   - Predicted Binary Water Mask
+   - Water Detection Overlay
+6. Calculate predicted water coverage.
+7. Download Original, Mask and Overlay PNG images.
 
-## Week 2 — Pretrained Multispectral Water Segmentation
+Water Coverage is NOT model accuracy.
 
-Week 2 extends the project using transfer learning.
+## Windows Setup
 
-Main work:
-- ImageNet-pretrained ResNet34 encoder
-- U-Net decoder
-- Adaptation from 3 RGB channels to 12 channels
-- First-layer initialization comparison
-- Random-init architecture control
-- Multi-seed fine-tuning
-- Comparison with the Week 1 scratch model
+Requirements:
+- Windows computer
+- Python 3.10 or newer
+- Internet access for the first dependency installation
 
-➡️ [Open Week 2](./week2/)
+Steps:
 
----
+1. Extract WaterSeg_AI_Gallery_Local.zip.
+2. Open the extracted folder.
+3. Double-click run.bat.
+4. Wait for package installation and model loading.
+5. Open http://127.0.0.1:5000 in your browser.
+6. Keep the command window open while using the app.
 
-## Final Week 2 Result
+If an older WaterSeg AI server is running on port 5000,
+stop it first using Ctrl+C in its command window.
 
-The selected pretrained ResNet34-U-Net achieved:
+## Gallery Testing
 
-- **Test IoU:** 0.7440 ± 0.0031
-- **Week 1 scratch Test IoU:** 0.6845 ± 0.0055
-- **Selected initialization:** `rgb_zero_extra`
+The gallery contains 46 images from the original Test Set.
 
-## Repository Structure
+Select any image and click Analyze Selected Image.
 
-```text
-├── week1/
-├── week2/
-├── .gitignore
-└── README.md
+You can also open the gallery_samples folder and upload
+one of its original TIFF files through the upload section.
+
+## External Upload
+
+Supported formats:
+- .tif
+- .tiff
+- .npy
+
+Expected image shape:
+- (12, 128, 128), or
+- (128, 128, 12)
+
+Maximum upload size: 20 MB.
+
+The spectral band order and image value conventions must
+match the original training dataset.
+
+Ordinary RGB/JPEG images are not supported.
+
+## REST API
+
+GET /
+    Web dashboard
+
+GET /health
+    Service health and model information
+
+GET /gallery
+    List all 46 available gallery samples
+
+POST /predict
+    Multipart upload using field name: file
+    Returns JSON with prediction and image data URLs
+
+POST /predict-sample/<sample_id>
+    Predict a built-in gallery sample
+    Returns JSON with prediction and image data URLs
+
+## Output
+
+- Original preview: RGB PNG
+- Binary mask: grayscale PNG
+- Overlay: RGB PNG highlighting predicted water in cyan
+
+Mask interpretation:
+- White = predicted water
+- Black = background
+
+## Verified Integration Tests
+
+- Homepage, CSS, JavaScript and health endpoint
+- All 46 gallery images and previews
+- Three real gallery predictions: 261, 161, 245
+- External TIFF upload
+- External NPY upload
+- Prediction matches standalone inference
+- Nine API error-handling cases
+
+The Flask test client was used for integration testing.
+Interactive browser testing is performed separately.
+
+## Example Test Results
+
+Sample 261:
+- Predicted coverage: 0.55%
+- IoU: 0.1845
+
+Sample 161:
+- Predicted coverage: 39.70%
+- IoU: 0.7196
+
+Sample 245:
+- Predicted coverage: 55.34%
+- IoU: 0.9317
+
+These results describe individual test samples,
+not overall test-set accuracy.
+
+## Project Notes
+
+- Original Week 2 preprocessing is reused.
+- Original training statistics are included.
+- The selected trained checkpoint is included.
+- No retraining is required for local inference.
+- The app uses Flask's development server.
+- Do not expose this local development server publicly.
+- GitHub publishing is intentionally deferred.

@@ -1,0 +1,278 @@
+[
+  {
+    "sample_id": "5",
+    "filename": "sample_5.tif",
+    "preview_url": "/static/gallery_previews/sample_5.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "44",
+    "filename": "sample_44.tif",
+    "preview_url": "/static/gallery_previews/sample_44.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "49",
+    "filename": "sample_49.tif",
+    "preview_url": "/static/gallery_previews/sample_49.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "52",
+    "filename": "sample_52.tif",
+    "preview_url": "/static/gallery_previews/sample_52.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "63",
+    "filename": "sample_63.tif",
+    "preview_url": "/static/gallery_previews/sample_63.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "66",
+    "filename": "sample_66.tif",
+    "preview_url": "/static/gallery_previews/sample_66.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "72",
+    "filename": "sample_72.tif",
+    "preview_url": "/static/gallery_previews/sample_72.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "79",
+    "filename": "sample_79.tif",
+    "preview_url": "/static/gallery_previews/sample_79.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "82",
+    "filename": "sample_82.tif",
+    "preview_url": "/static/gallery_previews/sample_82.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "83",
+    "filename": "sample_83.tif",
+    "preview_url": "/static/gallery_previews/sample_83.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "84",
+    "filename": "sample_84.tif",
+    "preview_url": "/static/gallery_previews/sample_84.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "91",
+    "filename": "sample_91.tif",
+    "preview_url": "/static/gallery_previews/sample_91.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "112",
+    "filename": "sample_112.tif",
+    "preview_url": "/static/gallery_previews/sample_112.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "114",
+    "filename": "sample_114.tif",
+    "preview_url": "/static/gallery_previews/sample_114.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "115",
+    "filename": "sample_115.tif",
+    "preview_url": "/static/gallery_previews/sample_115.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "116",
+    "filename": "sample_116.tif",
+    "preview_url": "/static/gallery_previews/sample_116.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "124",
+    "filename": "sample_124.tif",
+    "preview_url": "/static/gallery_previews/sample_124.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "127",
+    "filename": "sample_127.tif",
+    "preview_url": "/static/gallery_previews/sample_127.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "129",
+    "filename": "sample_129.tif",
+    "preview_url": "/static/gallery_previews/sample_129.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "131",
+    "filename": "sample_131.tif",
+    "preview_url": "/static/gallery_previews/sample_131.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "134",
+    "filename": "sample_134.tif",
+    "preview_url": "/static/gallery_previews/sample_134.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "154",
+    "filename": "sample_154.tif",
+    "preview_url": "/static/gallery_previews/sample_154.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "159",
+    "filename": "sample_159.tif",
+    "preview_url": "/static/gallery_previews/sample_159.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "161",
+    "filename": "sample_161.tif",
+    "preview_url": "/static/gallery_previews/sample_161.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "167",
+    "filename": "sample_167.tif",
+    "preview_url": "/static/gallery_previews/sample_167.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "173",
+    "filename": "sample_173.tif",
+    "preview_url": "/static/gallery_previews/sample_173.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "178",
+    "filename": "sample_178.tif",
+    "preview_url": "/static/gallery_previews/sample_178.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "179",
+    "filename": "sample_179.tif",
+    "preview_url": "/static/gallery_previews/sample_179.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "213",
+    "filename": "sample_213.tif",
+    "preview_url": "/static/gallery_previews/sample_213.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "216",
+    "filename": "sample_216.tif",
+    "preview_url": "/static/gallery_previews/sample_216.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "219",
+    "filename": "sample_219.tif",
+    "preview_url": "/static/gallery_previews/sample_219.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "225",
+    "filename": "sample_225.tif",
+    "preview_url": "/static/gallery_previews/sample_225.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "239",
+    "filename": "sample_239.tif",
+    "preview_url": "/static/gallery_previews/sample_239.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "244",
+    "filename": "sample_244.tif",
+    "preview_url": "/static/gallery_previews/sample_244.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "245",
+    "filename": "sample_245.tif",
+    "preview_url": "/static/gallery_previews/sample_245.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "250",
+    "filename": "sample_250.tif",
+    "preview_url": "/static/gallery_previews/sample_250.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "255",
+    "filename": "sample_255.tif",
+    "preview_url": "/static/gallery_previews/sample_255.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "259",
+    "filename": "sample_259.tif",
+    "preview_url": "/static/gallery_previews/sample_259.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "261",
+    "filename": "sample_261.tif",
+    "preview_url": "/static/gallery_previews/sample_261.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "263",
+    "filename": "sample_263.tif",
+    "preview_url": "/static/gallery_previews/sample_263.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "268",
+    "filename": "sample_268.tif",
+    "preview_url": "/static/gallery_previews/sample_268.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "270",
+    "filename": "sample_270.tif",
+    "preview_url": "/static/gallery_previews/sample_270.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "287",
+    "filename": "sample_287.tif",
+    "preview_url": "/static/gallery_previews/sample_287.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "297",
+    "filename": "sample_297.tif",
+    "preview_url": "/static/gallery_previews/sample_297.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "299",
+    "filename": "sample_299.tif",
+    "preview_url": "/static/gallery_previews/sample_299.png",
+    "split": "test"
+  },
+  {
+    "sample_id": "302",
+    "filename": "sample_302.tif",
+    "preview_url": "/static/gallery_previews/sample_302.png",
+    "split": "test"
+  }
+]

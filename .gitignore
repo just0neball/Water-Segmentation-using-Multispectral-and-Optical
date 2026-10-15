@@ -1,3 +1,7 @@
-*.pth
+.venv/
 __pycache__/
+*.pyc
 .ipynb_checkpoints/
+.DS_Store
+best_water_segmentation_model.pth
+*.zip

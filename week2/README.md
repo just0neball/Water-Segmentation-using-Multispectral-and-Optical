@@ -1,0 +1,184 @@
+# Week 2 — Pretrained Water Segmentation (12-channel multispectral input)
+
+Transfer learning for binary water segmentation: an **ImageNet-pretrained ResNet34 encoder + U-Net decoder**
+([`segmentation-models-pytorch`](https://github.com/qubvel-org/segmentation_models.pytorch)) is adapted from 3 to
+**12 input channels**, fine-tuned on the Week 1 dataset and compared with the **Week 1 U-Net trained from scratch**
+(IoU, F1, Precision, Recall on the water class).
+
+> Part of the Cellula Technologies water-segmentation task. Week 1 (dataset exploration, preprocessing, scratch U-Net)
+> lives in the repository root; this folder contains Week 2 only.
+
+---
+
+## What is compared
+
+| Model | Weights | Purpose |
+|---|---|---|
+| Week 1 `UNetBN`, `benchmark12` | scratch | baseline required by the task |
+| ResNet34-U-Net, **random init** | none | control: same architecture as the pretrained model, **no** ImageNet weights |
+| ResNet34-U-Net, **ImageNet-pretrained** | ImageNet, first conv adapted to 12 channels | the Week 2 model |
+
+The random-init control matters: the ResNet34-U-Net is larger than the Week 1 U-Net, so an improvement over Week 1
+alone cannot be credited to pretraining. Only the pretrained-vs-random-init gap can.
+
+Everything else is identical: Week 1 split (`config/split_v2.csv`: 214 / 46 / 46), Week 1 train-derived
+normalisation (`config/stats.json`), `benchmark12` preprocessing, augmentation (flips + 90° rotations), BCE + Dice loss,
+threshold 0.5, seeds 42 / 123 / 2026.
+
+## First-layer adaptation (3 → 12 channels)
+
+| Strategy | Initialisation |
+|---|---|
+| `mean` | average the pretrained R/G/B filters, repeat over 12 channels, scale by 3/12 |
+| `rgb_zero_extra` | copy R/G/B filters onto the dataset's Red/Green/Blue bands (indices 3/2/1) and zero the other 9 channels |
+
+The dataset channel order is *Coastal, Blue, Green, Red, NIR, SWIR1, SWIR2, QA, MERIT, Copernicus, WorldCover,
+Water Occurrence*, which differs from the ImageNet R, G, B order, hence the explicit mapping.
+The strategy is selected by **mean validation IoU over all seeds** (never on the test set).
+
+## Repository layout
+
+```
+week2/
+├── README.md
+├── requirements.txt
+├── config/                 split_v2.csv, stats.json   (copied from Week 1, unchanged)
+├── src/
+│   ├── config.py           all hyper-parameters / paths (PipelineConfig)
+│   ├── preprocessing.py    12-channel per-band normalisation -> (12, 128, 128)
+│   ├── data.py             dataset, augmentation, reproducible loaders
+│   ├── model.py            smp model + 3->12 channel adaptation strategies
+│   ├── losses.py           BCE + Dice
+│   ├── metrics.py          IoU / F1 / Precision / Recall from confusion counts
+│   ├── engine.py           train / evaluate / early stopping / checkpoints
+│   ├── analysis.py         Week 1 baseline loading, comparison tables, coverage analysis
+│   ├── reporting.py        figures, markdown tables, auto-generated findings
+│   └── pipeline.py         end-to-end experiment (train -> select -> test -> compare)
+├── scripts/run_week2.py    command-line entry point
+├── notebooks/week2_pretrained_water_segmentation.ipynb   explanation + run + display
+├── tests/                  pytest unit tests
+├── results/                CSV outputs (generated)
+└── figures/                PNG outputs (generated)
+```
+
+## How to run
+
+```bash
+pip install -r requirements.txt
+
+# full experiment: 2 init strategies x 3 seeds + random-init control x 3 seeds
+python scripts/run_week2.py --data-root /path/to/satellite-multispectral-water-segmentation
+
+# quick smoke test (1 seed, 2 epochs, written to _quick_run/)
+python scripts/run_week2.py --data-root /path/to/dataset --quick
+
+# unit tests
+python -m pytest tests -q
+```
+
+`--data-root` must contain `images/*.tif` and `labels/*.png`
+([Kaggle dataset](https://www.kaggle.com/datasets/nebalelshobary/satellite-multispectral-water-segmentation)).
+On Kaggle the default path is detected automatically; the notebook clones this repo if needed. Finished runs are
+reused automatically (`--no-resume` forces retraining). Model weights (`*.pth`) are git-ignored.
+ImageNet weights are downloaded by `segmentation-models-pytorch` at the first run (internet required).
+
+Optional arguments:
+
+| Argument | Meaning |
+|---|---|
+| `--week1-test-csv FILE` | CSV with Week 1 **test** metrics per seed (`Seed, IoU, F1, Precision, Recall`) → adds the test-set comparison |
+| `--week1-params-m 7.8` | Week 1 model size in millions of parameters → shown in the comparison table |
+| `--decoder deeplabv3plus` | DeepLabV3+ decoder instead of U-Net |
+| `--dice-mode per_image` | per-image Dice (use whichever variant Week 1 used) |
+| `--no-ablation` | skip the random-init control |
+
+> Training uses the exact Week 1 loss formulation: **BCE + per-image Dice**. Dice is computed independently for each image and then averaged across the batch.
+
+## Results
+
+The block below is regenerated by `scripts/run_week2.py` (and by the notebook). Numbers are never typed by hand.
+
+<!-- RESULTS:START -->
+## Results
+
+Encoder `resnet34` + `unet` decoder, seeds [42, 123, 2026], selected first-conv init: **`rgb_zero_extra`**.
+
+### Model comparison (mean ± std over seeds)
+
+| Model | Params (M) | Val IoU | Val F1 | Val Precision | Val Recall | Test IoU | Test F1 | Test Precision | Test Recall |
+|---|---|---|---|---|---|---|---|---|---|
+| Week 1 scratch U-Net (UNetBN, benchmark12) | 7.77 | 0.7542 ± 0.0021 | 0.8599 ± 0.0013 | 0.8972 ± 0.0058 | 0.8257 ± 0.0056 | 0.6845 ± 0.0055 | 0.8127 ± 0.0039 | nan | nan |
+| Week 2 resnet34-unet, random init (ablation) | 24.46 | 0.7606 ± 0.0165 | 0.8639 ± 0.0106 | 0.8972 ± 0.0107 | 0.8331 ± 0.0130 | 0.7032 ± 0.0289 | 0.8255 ± 0.0200 | 0.8501 ± 0.0221 | 0.8024 ± 0.0183 |
+| Week 2 resnet34-unet, ImageNet-pretrained (rgb_zero_extra) | 24.46 | 0.7825 ± 0.0062 | 0.8779 ± 0.0039 | 0.8884 ± 0.0164 | 0.8683 ± 0.0213 | 0.7440 ± 0.0031 | 0.8532 ± 0.0021 | 0.8545 ± 0.0126 | 0.8521 ± 0.0122 |
+
+### Per-seed validation IoU
+
+| Seed | Week 1 scratch | Pretrained | Random init | Δ Pretrained − Week 1 scratch | Δ Random init − Week 1 scratch |
+|---|---|---|---|---|---|
+| 42 | 0.7563 | 0.7754 | 0.7456 | 0.0190 | -0.0107 |
+| 123 | 0.7522 | 0.7867 | 0.7782 | 0.0345 | 0.0260 |
+| 2026 | 0.7542 | 0.7853 | 0.7579 | 0.0311 | 0.0037 |
+
+### Per-seed test IoU
+
+| Seed | Week 1 scratch | Pretrained | Random init | Δ Pretrained − Week 1 scratch | Δ Random init − Week 1 scratch |
+|---|---|---|---|---|---|
+| 42 | 0.6792 | 0.7410 | 0.6713 | 0.0618 | -0.0079 |
+| 123 | 0.6840 | 0.7473 | 0.7276 | 0.0633 | 0.0436 |
+| 2026 | 0.6903 | 0.7437 | 0.7108 | 0.0534 | 0.0206 |
+
+### First-layer initialisation strategies (validation IoU)
+
+| Strategy | Seed 42 | Seed 123 | Seed 2026 | Mean ± Std |
+|---|---|---|---|---|
+| rgb_zero_extra | 0.7754 | 0.7867 | 0.7853 | 0.7825 ± 0.0062 |
+| mean | 0.7665 | 0.7674 | 0.7856 | 0.7731 ± 0.0108 |
+
+### Error analysis by water coverage (selected model, held-out test; counts pooled over seeds, `N_images` counts each image once per seed)
+
+| Coverage_Group | N_images | FP_Pixel_Rate | IoU | F1 | Precision | Recall |
+|---|---|---|---|---|---|---|
+| No Water | 21 | 0.0053 | n/a | n/a | n/a | n/a |
+| Very Low (0-5%) | 33 | 0.0113 | 0.4427 | 0.6137 | 0.5611 | 0.6773 |
+| Low (5-20%) | 21 | 0.0191 | 0.5456 | 0.7060 | 0.8074 | 0.6272 |
+| Medium (20-50%) | 36 | 0.0447 | 0.7000 | 0.8235 | 0.8671 | 0.7841 |
+| High (50-80%) | 21 | 0.1134 | 0.7708 | 0.8706 | 0.8250 | 0.9215 |
+| Very High (80-100%) | 6 | 0.0248 | 0.9669 | 0.9832 | 0.9741 | 0.9924 |
+
+### Findings (auto-generated from the numbers above)
+
+- **Pretrained vs Week 1 scratch (validation):** mean IoU 0.7825 ± 0.0062 vs 0.7542 ± 0.0021 (Δ = +0.0282); higher in 3/3 seeds.
+  - Precision: -0.0088
+  - Recall: +0.0426
+  - F1: +0.0180
+- **Held-out test:** mean IoU 0.7440 (pretrained) vs 0.6845 (Week 1 scratch), Δ = +0.0595. The test set was not used for any selection, so this is the less optimistic comparison (validation IoU was used for early stopping in both weeks).
+- **Ablation (same ResNet34 architecture, random init):** val IoU 0.7606 ± 0.0165 vs 0.7825 ± 0.0062 pretrained (Δ = +0.0219); the gap exceeds the seed-to-seed spread, which suggests the ImageNet weights contribute beyond architecture and capacity (still only 3 seeds).
+  - The random-init ResNet34-U-Net already beats the Week 1 model by +0.0063 IoU, so part of the improvement is architectural.
+- **First-conv initialisation:** `rgb_zero_extra` (0.7825) vs `mean` (0.7731) - gap +0.0093, within seed variability, so the choice is not statistically meaningful.
+- **Capacity:** Week 2 model 24.46 M parameters vs Week 1 7.77 M.
+
+### Limitations
+
+- Only 3 seeds and a single 214/46/46 split; validation has just 46 patches, so small differences are noisy.
+- Validation IoU drives early stopping (and the init-strategy choice), so validation numbers are optimistic for
+  every model; the held-out test numbers are the unbiased estimate.
+- Hyper-parameters were reused from Week 1 and not tuned for the pretrained model.
+- The 12 channels include QA, ESA WorldCover and Water Occurrence, which can act as shortcut features
+  (see the Week 1 shortcut audit). Results therefore describe this 12-channel setting, not pure spectral learning.
+- ImageNet RGB statistics differ strongly from NIR/SWIR/DEM/categorical channels; the benefit of the pretrained
+  *first* layer is limited, most transferable value is expected in deeper layers (a hypothesis, not tested here).
+<!-- RESULTS:END -->
+
+## Notes
+
+* The long-form results (`RESULTS.md`), per-run CSVs in `results/` and figures in `figures/` are produced by the same run.
+* `Mean image IoU (water only)` in `results/all_runs_test.csv` skips images without water and is **not** the same
+  definition as Week 1's `Val_Mean_Image_IoU`; compare it only between Week 2 models.
+* Augmentation uses Python's global RNG, so `num_workers` is fixed to 0 for reproducibility.
+
+## References
+
+* Ronneberger et al., *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597
+* Chen et al., *DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully
+  Connected CRFs*, arXiv:1606.00915
+* [segmentation_models.pytorch](https://github.com/qubvel-org/segmentation_models.pytorch)

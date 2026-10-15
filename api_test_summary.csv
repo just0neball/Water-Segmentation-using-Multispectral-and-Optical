@@ -1,4 +1,0 @@
-Sample_ID,HTTP_Status,Predicted_Water_%,IoU,F1,Matches_Standalone,Original_Mask_Overlay
-261,200,0.55,0.1845,0.3116,True,True
-161,200,39.7,0.7196,0.837,True,True
-245,200,55.34,0.9317,0.9646,True,True

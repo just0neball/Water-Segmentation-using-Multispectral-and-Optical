@@ -1,9 +1,0 @@
-torch
-numpy
-pandas
-matplotlib
-tifffile
-pillow
-scikit-learn
-rasterio
-tqdm

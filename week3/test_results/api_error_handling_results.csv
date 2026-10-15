@@ -1,0 +1,10 @@
+Test,Expected,Actual,Passed
+Missing file,400,400,True
+Empty filename,400,400,True
+Unsupported format,415,415,True
+Invalid RGB image,400,400,True
+Incorrect dimensions,400,400,True
+NaN input,400,400,True
+Empty upload,400,400,True
+Oversized upload,413,413,True
+Unknown gallery sample,404,404,True
